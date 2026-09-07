@@ -1,37 +1,99 @@
 <ActionBar title="Productos" class="action-bar">
-  <NavigationButton text="Menú" android.systemIcon="ic_menu_moreoverflow" (tap)="openDrawer()"></NavigationButton>
+  <NavigationButton
+    text="Menú"
+    android.systemIcon="ic_menu_moreoverflow"
+    (tap)="openDrawer()">
+  </NavigationButton>
 </ActionBar>
 
-<GridLayout rows="auto, auto, *" class="page-content">
+<GridLayout rows="auto, auto, auto, *" class="page-content">
+
+  <!-- Encabezado -->
   <GridLayout row="0" columns="56, *" class="feature-header">
-    <Image col="0" src="res://icon_productos" class="feature-icon"></Image>
+    <Image
+      col="0"
+      src="res://icon_productos"
+      class="feature-icon">
+    </Image>
+
     <StackLayout col="1">
-      <Label text="Catálogo de productos" class="h1"></Label>
-      <Label [text]="mensajePlataforma" class="platform-note" textWrap="true"></Label>
+      <Label
+        text="Catálogo de productos"
+        class="h1">
+      </Label>
+
+      <Label
+        [text]="mensajePlataforma"
+        class="platform-note"
+        textWrap="true">
+      </Label>
     </StackLayout>
   </GridLayout>
 
-  <!-- Se conserva un ngFor explícito para evidenciar el requisito del módulo anterior. -->
-  <WrapLayout row="1" class="categorias">
-    <Label *ngFor="let categoria of categorias" [text]="categoria" class="categoria-chip"></Label>
+  <!-- Formulario de búsqueda con Two Way Binding -->
+  <SearchBar
+    row="1"
+    [(ngModel)]="textoBusqueda"
+    hint="Buscar productos..."
+    (textChange)="buscar()"
+    class="search-bar">
+  </SearchBar>
+
+  <!-- Se conserva ngFor para evidenciar la práctica anterior -->
+  <WrapLayout row="2" class="categorias">
+    <Label
+      *ngFor="let categoria of categorias"
+      [text]="categoria"
+      class="categoria-chip">
+    </Label>
   </WrapLayout>
 
-  <!-- Práctica: ListView + plantilla anidada + FlexboxLayout + imagen/texto + tap. -->
-  <ListView row="2" [items]="productos" class="lista-productos">
+  <!-- ListView con los resultados de búsqueda -->
+  <ListView
+    row="3"
+    [items]="resultadosBusqueda"
+    class="lista-productos">
+
     <ng-template let-producto="item">
       <FlexboxLayout
         flexDirection="row"
         alignItems="center"
         class="producto-card"
         (tap)="verDetalle(producto)">
-        <Image [src]="producto.imagen" class="producto-imagen"></Image>
+
+        <Image
+          [src]="producto.imagen"
+          class="producto-imagen">
+        </Image>
+
         <StackLayout class="producto-info">
-          <Label [text]="producto.nombre" class="producto-nombre" textWrap="true"></Label>
-          <Label [text]="producto.categoria" class="producto-categoria"></Label>
-          <Label [text]="'$' + producto.precio.toFixed(2)" class="producto-precio"></Label>
+
+          <Label
+            [text]="producto.nombre"
+            class="producto-nombre"
+            textWrap="true">
+          </Label>
+
+          <Label
+            [text]="producto.categoria"
+            class="producto-categoria">
+          </Label>
+
+          <Label
+            [text]="'$' + producto.precio.toFixed(2)"
+            class="producto-precio">
+          </Label>
+
         </StackLayout>
-        <Label text="&#xf054;" class="fas producto-flecha"></Label>
+
+        <Label
+          text="&#xf054;"
+          class="fas producto-flecha">
+        </Label>
+
       </FlexboxLayout>
     </ng-template>
+
   </ListView>
+
 </GridLayout>
