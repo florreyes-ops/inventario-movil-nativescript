@@ -14,10 +14,10 @@ export class ProductosListaComponent implements OnInit {
 
   productos: Producto[] = [];
 
-  // Resultados que se muestran después de realizar una búsqueda
+  // Array donde se almacenan los resultados filtrados
   resultadosBusqueda: Producto[] = [];
 
-  // Texto escrito en el SearchBar mediante [(ngModel)]
+  // Variable vinculada al SearchBar mediante [(ngModel)]
   textoBusqueda: string = '';
 
   categorias = ['Medición', 'Protección', 'Control'];
@@ -30,7 +30,7 @@ export class ProductosListaComponent implements OnInit {
     private routerExtensions: RouterExtensions
   ) {
 
-    // Código ejecutado solamente en Android
+    // Asignación exclusiva para Android
     if (isAndroid) {
       this.mensajePlataforma =
         'Modo Android: interfaz optimizada para Material Design';
@@ -38,11 +38,9 @@ export class ProductosListaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    // Obtiene todos los productos desde el servicio
     this.productos = this.productoService.getProductos();
 
-    // Inicialmente muestra todos los productos
+    // Al iniciar se muestran todos los productos
     this.resultadosBusqueda = [...this.productos];
   }
 
@@ -51,14 +49,10 @@ export class ProductosListaComponent implements OnInit {
     drawer.showDrawer();
   }
 
-  // Filtra el listado en función del texto introducido
+  // Actualiza los resultados según el texto ingresado
   buscar(): void {
+    const texto = this.textoBusqueda.toLowerCase().trim();
 
-    const texto = this.textoBusqueda
-      .toLowerCase()
-      .trim();
-
-    // Si no hay texto, vuelve a mostrar todos los productos
     if (!texto) {
       this.resultadosBusqueda = [...this.productos];
       return;
@@ -72,15 +66,12 @@ export class ProductosListaComponent implements OnInit {
     );
   }
 
-  // Reacciona al tap y navega al detalle usando RouterExtensions
+  // Navega al detalle mediante RouterExtensions
   verDetalle(producto: Producto): void {
-    this.routerExtensions.navigate(
-      ['/productos', producto.id],
-      {
-        transition: {
-          name: 'slideLeft'
-        }
+    this.routerExtensions.navigate(['/productos', producto.id], {
+      transition: {
+        name: 'slideLeft'
       }
-    );
+    });
   }
 }
