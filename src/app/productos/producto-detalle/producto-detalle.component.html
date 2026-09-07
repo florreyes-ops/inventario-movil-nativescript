@@ -1,0 +1,14 @@
+<ActionBar title="Detalle del producto" class="action-bar">
+  <NavigationButton text="Atrás" android.systemIcon="ic_menu_back" (tap)="volver()"></NavigationButton>
+</ActionBar>
+
+<ScrollView *ngIf="producto">
+  <StackLayout class="page-content detalle">
+    <Image src="res://icon_productos" class="detalle-icon"></Image>
+    <Label [text]="producto.nombre" class="detalle-titulo" textWrap="true"></Label>
+    <Label [text]="producto.categoria" class="detalle-categoria"></Label>
+    <Label [text]="'$' + producto.precio.toFixed(2)" class="detalle-precio"></Label>
+    <Label [text]="'Stock disponible: ' + producto.stock" class="detalle-stock"></Label>
+    <Label [text]="producto.descripcion" class="detalle-descripcion" textWrap="true"></Label>
+  </StackLayout>
+</ScrollView>

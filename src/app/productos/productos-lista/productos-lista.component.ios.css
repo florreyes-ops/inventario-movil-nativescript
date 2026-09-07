@@ -1,0 +1,12 @@
+/* Requisito 8: sobrecarga específica para iOS */
+.producto-card {
+  border-radius: 12;
+  padding: 14;
+  border-width: 1;
+  border-color: #e5e7eb;
+}
+
+.producto-nombre {
+  font-size: 17;
+  color: #1c1c1e;
+}

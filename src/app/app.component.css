@@ -1,0 +1,39 @@
+.drawer {
+  background-color: white;
+}
+
+.drawer-header {
+  background-color: #1f4e79;
+  padding: 28 20 20 20;
+}
+
+.drawer-title {
+  color: white;
+  font-size: 24;
+  font-weight: bold;
+}
+
+.drawer-subtitle {
+  color: #dce8f2;
+  margin-top: 4;
+}
+
+.drawer-list {
+  padding-top: 12;
+}
+
+.drawer-item {
+  height: 54;
+  padding: 8 16;
+}
+
+.drawer-icon {
+  width: 26;
+  height: 26;
+  vertical-align: middle;
+}
+
+.drawer-label {
+  font-size: 17;
+  vertical-align: middle;
+}

@@ -1,0 +1,11 @@
+/* Requisito 8: sobrecarga específica para Android */
+.producto-card {
+  border-radius: 4;
+  elevation: 4;
+  padding: 16;
+}
+
+.producto-nombre {
+  font-size: 18;
+  color: #263238;
+}

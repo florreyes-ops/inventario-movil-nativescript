@@ -1,0 +1,28 @@
+<ActionBar title="Productos" class="action-bar">
+  <NavigationButton text="Menú" android.systemIcon="ic_menu_moreoverflow" (tap)="openDrawer()"></NavigationButton>
+</ActionBar>
+
+<ScrollView>
+  <StackLayout class="page-content">
+    <GridLayout columns="56, *" class="feature-header">
+      <Image col="0" src="res://icon_productos" class="feature-icon"></Image>
+      <StackLayout col="1">
+        <Label text="Catálogo de productos" class="h1"></Label>
+        <Label [text]="mensajePlataforma" class="platform-note" textWrap="true"></Label>
+      </StackLayout>
+    </GridLayout>
+
+    <!-- Requisito 7: uso explícito de ngFor en una vista -->
+    <GridLayout
+      *ngFor="let producto of productos"
+      rows="auto, auto, auto"
+      columns="*, auto"
+      class="producto-card"
+      (tap)="verDetalle(producto)">
+      <Label row="0" col="0" [text]="producto.nombre" class="producto-nombre"></Label>
+      <Label row="0" col="1" [text]="'$' + producto.precio.toFixed(2)" class="producto-precio"></Label>
+      <Label row="1" colSpan="2" [text]="producto.categoria" class="producto-categoria"></Label>
+      <Label row="2" colSpan="2" [text]="'Existencias: ' + producto.stock" class="producto-stock"></Label>
+    </GridLayout>
+  </StackLayout>
+</ScrollView>

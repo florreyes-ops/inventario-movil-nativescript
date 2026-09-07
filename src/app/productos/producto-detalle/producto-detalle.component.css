@@ -1,0 +1,42 @@
+.detalle {
+  background-color: white;
+  margin: 16;
+  border-radius: 10;
+}
+
+.detalle-icon {
+  width: 88;
+  height: 88;
+  margin: 10 0 20 0;
+}
+
+.detalle-titulo {
+  font-size: 26;
+  font-weight: bold;
+  text-align: center;
+}
+
+.detalle-categoria {
+  text-align: center;
+  color: #667085;
+  margin-top: 6;
+}
+
+.detalle-precio {
+  font-size: 28;
+  font-weight: bold;
+  color: #1f4e79;
+  text-align: center;
+  margin-top: 18;
+}
+
+.detalle-stock {
+  text-align: center;
+  margin-top: 10;
+}
+
+.detalle-descripcion {
+  margin-top: 24;
+  font-size: 16;
+  line-height: 6;
+}

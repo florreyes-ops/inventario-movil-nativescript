@@ -1,0 +1,6 @@
+TÍTULO DEL PROYECTO:
+Inventario Móvil NativeScript – Catálogo de Productos
+
+URL:
+Pegar aquí la URL pública del repositorio de GitHub después de subir esta carpeta.
+Ejemplo de formato: https://github.com/TU-USUARIO/inventario-movil-nativescript
