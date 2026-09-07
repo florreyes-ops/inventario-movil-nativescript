@@ -1,23 +1,82 @@
-from pathlib import Path
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { EventData } from '@nativescript/core';
+import { RouterExtensions } from '@nativescript/angular';
+import { Opinion, Producto } from '../../core/models/producto.model';
+import { ProductoService } from '../../core/services/producto.service';
 
-root = Path(__file__).parent
-checks = {
-    '1 Drawer': 'RadSideDrawer' in (root/'src/app/app.component.html').read_text(encoding='utf-8'),
-    '2 Dos componentes': all((root/p).exists() for p in [
-        'src/app/productos/productos-lista/productos-lista.component.ts',
-        'src/app/productos/producto-detalle/producto-detalle.component.ts']),
-    '3 Modulo': (root/'src/app/productos/productos.module.ts').exists(),
-    '4 Routing': (root/'src/app/productos/productos-routing.module.ts').exists(),
-    '5 Drawer Productos': "title: 'Productos'" in (root/'src/app/app.component.ts').read_text(encoding='utf-8'),
-    '6 Service global': "providedIn: 'root'" in (root/'src/app/core/services/producto.service.ts').read_text(encoding='utf-8'),
-    '7 ngFor': '*ngFor' in (root/'src/app/productos/productos-lista/productos-lista.component.html').read_text(encoding='utf-8'),
-    '8 CSS plataformas': all((root/p).exists() for p in [
-        'src/app/productos/productos-lista/productos-lista.component.android.css',
-        'src/app/productos/productos-lista/productos-lista.component.ios.css']),
-    '9 Icono App_Resources': (root/'App_Resources/Android/src/main/res/drawable/icon_productos.png').exists(),
-    '10 Android only': 'if (isAndroid)' in (root/'src/app/productos/productos-lista/productos-lista.component.ts').read_text(encoding='utf-8')
+@Component({
+  selector: 'ns-producto-detalle',
+  templateUrl: './producto-detalle.component.html',
+  styleUrls: ['./producto-detalle.component.css']
+})
+export class ProductoDetalleComponent implements OnInit {
+  producto?: Producto;
+  opiniones: Opinion[] = [];
+
+  private readonly nombres = ['Ana', 'Miguel', 'Sofía', 'Roberto', 'Elena', 'Fernando'];
+  private readonly comentarios = [
+    'Me pareció un producto muy práctico.',
+    'Cumple bien para trabajos eléctricos básicos.',
+    'La calidad es buena para su precio.',
+    'Lo utilizaría nuevamente en mantenimiento.',
+    'La descripción coincide con el producto recibido.',
+    'Buen funcionamiento durante las pruebas.'
+  ];
+
+  constructor(
+    private route: ActivatedRoute,
+    private productoService: ProductoService,
+    private routerExtensions: RouterExtensions
+  ) {}
+
+  ngOnInit(): void {
+    const id = Number(this.route.snapshot.params['id']);
+    this.producto = this.productoService.getProductoById(id);
+    this.opiniones = this.producto ? [...this.producto.opiniones] : [];
+  }
+
+  volver(): void {
+    this.routerExtensions.back();
+  }
+
+  editar(): void {
+    if (!this.producto) {
+      return;
+    }
+
+    this.routerExtensions.navigate(['/productos', this.producto.id, 'editar'], {
+      transition: { name: 'slideLeft' }
+    });
+  }
+
+  votar(opinion: Opinion, tipo: 'positivo' | 'negativo'): void {
+    if (tipo === 'positivo') {
+      opinion.votosPositivos++;
+    } else {
+      opinion.votosNegativos++;
+    }
+    // Se crea una nueva referencia para refrescar la vista inmediatamente.
+    this.opiniones = [...this.opiniones];
+  }
+
+  // Pull to refresh: agrega una opinión aleatoria y finaliza el indicador de actualización.
+  actualizarOpiniones(args: EventData): void {
+    const control = args.object as any;
+
+    setTimeout(() => {
+      const nombre = this.nombres[Math.floor(Math.random() * this.nombres.length)];
+      const comentario = this.comentarios[Math.floor(Math.random() * this.comentarios.length)];
+      const nuevaOpinion: Opinion = {
+        id: Date.now(),
+        usuario: nombre,
+        comentario,
+        votosPositivos: Math.floor(Math.random() * 5),
+        votosNegativos: Math.floor(Math.random() * 2)
+      };
+
+      this.opiniones = [nuevaOpinion, ...this.opiniones];
+      control.refreshing = false;
+    }, 800);
+  }
 }
-for k,v in checks.items():
-    print(('OK' if v else 'FALTA') + ' - ' + k)
-if not all(checks.values()):
-    raise SystemExit(1)

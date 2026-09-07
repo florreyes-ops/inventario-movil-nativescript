@@ -1,44 +1,102 @@
-# Evidencias de prácticas: ListView, detalle y Pull to Refresh
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
+import { Dialogs } from '@nativescript/core';
+import { RouterExtensions } from '@nativescript/angular';
+import { Toasty } from '@triniwiz/nativescript-toasty';
+import { ProductoService } from '../../core/services/producto.service';
 
-## Práctica: listado maestro y navegación a detalle
+// Validador personalizado: exige una longitud mínima ignorando espacios al inicio/final.
+export function textoMinimo(minimo: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const valor = String(control.value ?? '').trim();
+    return valor.length >= minimo
+      ? null
+      : { textoMinimo: { minimo, actual: valor.length } };
+  };
+}
 
-1. **Dos componentes**
-   - `src/app/productos/productos-lista/productos-lista.component.ts`
-   - `src/app/productos/producto-detalle/producto-detalle.component.ts`
+@Component({
+  selector: 'ns-producto-editar',
+  templateUrl: './producto-editar.component.html',
+  styleUrls: ['./producto-editar.component.css']
+})
+export class ProductoEditarComponent implements OnInit {
+  productoId = 0;
 
-2. **ListView con plantilla anidada y FlexboxLayout**
-   - `src/app/productos/productos-lista/productos-lista.component.html`
-   - Estructura: `ListView > ng-template > FlexboxLayout`.
+  formulario = new FormGroup({
+    nombre: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, textoMinimo(5)]
+    }),
+    descripcion: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, textoMinimo(10)]
+    })
+  });
 
-3. **Binding de imagen y texto**
-   - `[src]="producto.imagen"`
-   - `[text]="producto.nombre"`
+  constructor(
+    private route: ActivatedRoute,
+    private productoService: ProductoService,
+    private routerExtensions: RouterExtensions
+  ) {}
 
-4. **Reacción al tap**
-   - `(tap)="verDetalle(producto)"` sobre el `FlexboxLayout`.
+  ngOnInit(): void {
+    this.productoId = Number(this.route.snapshot.params['id']);
+    const producto = this.productoService.getProductoById(this.productoId);
 
-5. **Navegación mediante RouterExtensions**
-   - `ProductosListaComponent.verDetalle()` navega a `/productos/:id` con `RouterExtensions`.
+    if (!producto) {
+      Dialogs.alert({
+        title: 'Producto no encontrado',
+        message: 'No fue posible cargar el elemento seleccionado.',
+        okButtonText: 'Aceptar'
+      }).then(() => this.routerExtensions.back());
+      return;
+    }
 
-## Práctica: opiniones y Pull to Refresh
+    this.formulario.setValue({
+      nombre: producto.nombre,
+      descripcion: producto.descripcion
+    });
+  }
 
-1. **Segundo ListView en la vista de detalle**
-   - `src/app/productos/producto-detalle/producto-detalle.component.html`
-   - Lista el arreglo `opiniones` del producto.
+  get nombre(): FormControl<string> {
+    return this.formulario.controls.nombre;
+  }
 
-2. **GridLayout anidado**
-   - Cada opinión usa un `GridLayout` con usuario, comentario y controles de voto.
+  get descripcion(): FormControl<string> {
+    return this.formulario.controls.descripcion;
+  }
 
-3. **Íconos de opciones**
-   - Font Awesome `thumbs-up` (`&#xf164;`) y `thumbs-down` (`&#xf165;`).
-   - Los íconos reaccionan a `tap` mediante `votar(...)`.
+  guardar(): void {
+    this.formulario.markAllAsTouched();
 
-4. **Pull to refresh y nuevos elementos aleatorios**
-   - Control `PullToRefresh` registrado en `src/main.ts`.
-   - Dependencia `@nativescript-community/ui-pulltorefresh` en `package.json`.
-   - `actualizarOpiniones()` crea una opinión aleatoria y la inserta al inicio.
-   - Al terminar se establece `control.refreshing = false`.
+    if (this.formulario.invalid) {
+      Dialogs.alert({
+        title: 'Formulario incompleto',
+        message: 'Corrige los campos marcados antes de guardar.',
+        okButtonText: 'Aceptar'
+      });
+      return;
+    }
 
-## Compatibilidad con la práctica anterior
+    this.productoService.actualizarProducto(this.productoId, {
+      nombre: this.nombre.value.trim(),
+      descripcion: this.descripcion.value.trim()
+    });
 
-Se conserva el uso explícito de `*ngFor` en categorías/características, los estilos Android/iOS, el servicio global, el módulo de productos y la lógica exclusiva para Android.
+    new Toasty({ text: 'Datos del producto editados correctamente' }).show();
+    this.routerExtensions.back();
+  }
+
+  cancelar(): void {
+    this.routerExtensions.back();
+  }
+}

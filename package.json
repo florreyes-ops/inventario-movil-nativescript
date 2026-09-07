@@ -1,38 +1,48 @@
-{
-  "name": "inventario-movil-nativescript",
-  "version": "1.0.0",
-  "description": "Proyecto académico NativeScript + Angular basado en el template drawer-navigation-ng.",
-  "main": "src/main.ts",
-  "author": "Abner Díaz",
-  "license": "MIT",
-  "scripts": {
-    "android": "ns run android",
-    "ios": "ns run ios",
-    "clean": "ns clean"
-  },
-  "dependencies": {
-    "@angular/animations": "~18.0.0",
-    "@angular/common": "~18.0.0",
-    "@angular/compiler": "~18.0.0",
-    "@angular/core": "~18.0.0",
-    "@angular/forms": "~18.0.0",
-    "@angular/platform-browser": "~18.0.0",
-    "@angular/platform-browser-dynamic": "~18.0.0",
-    "@angular/router": "~18.0.0",
-    "@nativescript/angular": "^18.0.0",
-    "@nativescript/core": "~9.0.0",
-    "@nativescript/theme": "^3.1.0",
-    "nativescript-ui-sidedrawer": "~15.2.3",
-    "rxjs": "~7.8.0",
-    "zone.js": "~0.14.0",
-    "@nativescript-community/ui-pulltorefresh": "^2.5.11"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "~18.0.0",
-    "@angular/compiler-cli": "~18.0.0",
-    "@nativescript/types": "~9.0.0",
-    "@nativescript/webpack": "~5.0.25",
-    "@ngtools/webpack": "~18.0.0",
-    "typescript": "~5.4.0"
-  }
+.editar-page {
+  padding: 18;
+  background-color: #f4f6f8;
+}
+
+.editar-titulo {
+  font-size: 24;
+  font-weight: bold;
+  margin-bottom: 4;
+}
+
+.editar-ayuda {
+  color: #667085;
+  margin-bottom: 18;
+}
+
+.campo-label {
+  font-weight: bold;
+  margin-top: 12;
+  margin-bottom: 5;
+}
+
+.campo-input,
+.campo-textarea {
+  background-color: white;
+  border-width: 1;
+  border-color: #d0d5dd;
+  border-radius: 8;
+  padding: 10;
+}
+
+.campo-textarea {
+  height: 120;
+}
+
+.error-text {
+  color: #b42318;
+  font-size: 12;
+  margin-top: 4;
+}
+
+.guardar-btn {
+  margin-top: 22;
+}
+
+.cancelar-btn {
+  margin-top: 8;
 }
