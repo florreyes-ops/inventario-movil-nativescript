@@ -1,48 +1,184 @@
 <ActionBar title="Detalle del producto" class="action-bar">
-  <NavigationButton text="Atrás" android.systemIcon="ic_menu_back" (tap)="volver()"></NavigationButton>
+  <NavigationButton
+    text="Atrás"
+    android.systemIcon="ic_menu_back"
+    (tap)="volver()">
+  </NavigationButton>
 </ActionBar>
 
-<GridLayout *ngIf="producto" rows="auto, auto, *" class="page-content detalle">
-  <GridLayout row="0" columns="88, *" class="detalle-cabecera">
-    <Image col="0" [src]="producto.imagen" class="detalle-icon"></Image>
-    <StackLayout col="1" class="detalle-info">
-      <Label [text]="producto.nombre" class="detalle-titulo" textWrap="true"></Label>
-      <Label [text]="producto.categoria" class="detalle-categoria"></Label>
-      <Label [text]="'$' + producto.precio.toFixed(2)" class="detalle-precio"></Label>
-      <Label [text]="'Stock disponible: ' + producto.stock" class="detalle-stock"></Label>
+<GridLayout
+  *ngIf="producto"
+  rows="auto, auto, *"
+  class="page-content detalle">
+
+  <!-- Cabecera del producto -->
+  <GridLayout
+    row="0"
+    columns="88, *"
+    class="detalle-cabecera">
+
+    <Image
+      col="0"
+      [src]="producto.imagen"
+      class="detalle-icon">
+    </Image>
+
+    <StackLayout
+      col="1"
+      class="detalle-info">
+
+      <Label
+        [text]="producto.nombre"
+        class="detalle-titulo"
+        textWrap="true">
+      </Label>
+
+      <Label
+        [text]="producto.categoria"
+        class="detalle-categoria">
+      </Label>
+
+      <Label
+        [text]="'$' + producto.precio.toFixed(2)"
+        class="detalle-precio">
+      </Label>
+
+      <Label
+        [text]="'Stock disponible: ' + producto.stock"
+        class="detalle-stock">
+      </Label>
+
     </StackLayout>
   </GridLayout>
 
-  <StackLayout row="1" class="detalle-resumen">
-    <Label [text]="producto.descripcion" class="detalle-descripcion" textWrap="true"></Label>
-    <Label text="Características" class="seccion-titulo"></Label>
-    <!-- ngFor conservado como evidencia del requisito del módulo anterior. -->
-    <Label *ngFor="let caracteristica of producto.caracteristicas" [text]="'• ' + caracteristica" class="caracteristica"></Label>
-    <Label text="Opiniones de usuarios" class="seccion-titulo opiniones-titulo"></Label>
-    <Label text="Desliza hacia abajo para agregar una opinión aleatoria" class="ayuda-refresh" textWrap="true"></Label>
+  <!-- Información y botón de edición -->
+  <StackLayout
+    row="1"
+    class="detalle-resumen">
+
+    <Label
+      [text]="producto.descripcion"
+      class="detalle-descripcion"
+      textWrap="true">
+    </Label>
+
+    <!-- Botón para abrir el formulario de edición -->
+    <Button
+      text="Editar producto"
+      class="btn btn-primary"
+      (tap)="editar()">
+    </Button>
+
+    <Label
+      text="Características"
+      class="seccion-titulo">
+    </Label>
+
+    <!-- ngFor conservado como evidencia -->
+    <Label
+      *ngFor="let caracteristica of producto.caracteristicas"
+      [text]="'• ' + caracteristica"
+      class="caracteristica">
+    </Label>
+
+    <Label
+      text="Opiniones de usuarios"
+      class="seccion-titulo opiniones-titulo">
+    </Label>
+
+    <Label
+      text="Desliza hacia abajo para agregar una opinión aleatoria"
+      class="ayuda-refresh"
+      textWrap="true">
+    </Label>
+
   </StackLayout>
 
-  <!-- Práctica: segundo ListView dentro de PullToRefresh. -->
-  <PullToRefresh row="2" (refresh)="actualizarOpiniones($event)">
-    <ListView [items]="opiniones" class="opiniones-lista">
-      <ng-template let-opinion="item">
-        <!-- GridLayout anidado para cada opinión. -->
-        <GridLayout columns="44, *, 42, 42" rows="auto, auto" class="opinion-card">
-          <Label row="0" col="0" rowSpan="2" text="&#xf2bd;" class="fas usuario-icon"></Label>
-          <Label row="0" col="1" [text]="opinion.usuario" class="opinion-usuario"></Label>
-          <Label row="1" col="1" [text]="opinion.comentario" class="opinion-comentario" textWrap="true"></Label>
+  <!-- Pull to Refresh + segundo ListView -->
+  <PullToRefresh
+    row="2"
+    (refresh)="actualizarOpiniones($event)">
 
-          <!-- Íconos de opción: voto positivo y negativo. -->
-          <StackLayout row="0" col="2" rowSpan="2" class="voto" (tap)="votar(opinion, 'positivo')">
-            <Label text="&#xf164;" class="fas voto-icon"></Label>
-            <Label [text]="opinion.votosPositivos" class="voto-numero"></Label>
+    <ListView
+      [items]="opiniones"
+      class="opiniones-lista">
+
+      <ng-template let-opinion="item">
+
+        <!-- GridLayout anidado para cada opinión -->
+        <GridLayout
+          columns="44, *, 42, 42"
+          rows="auto, auto"
+          class="opinion-card">
+
+          <Label
+            row="0"
+            col="0"
+            rowSpan="2"
+            text="&#xf2bd;"
+            class="fas usuario-icon">
+          </Label>
+
+          <Label
+            row="0"
+            col="1"
+            [text]="opinion.usuario"
+            class="opinion-usuario">
+          </Label>
+
+          <Label
+            row="1"
+            col="1"
+            [text]="opinion.comentario"
+            class="opinion-comentario"
+            textWrap="true">
+          </Label>
+
+          <!-- Voto positivo -->
+          <StackLayout
+            row="0"
+            col="2"
+            rowSpan="2"
+            class="voto"
+            (tap)="votar(opinion, 'positivo')">
+
+            <Label
+              text="&#xf164;"
+              class="fas voto-icon">
+            </Label>
+
+            <Label
+              [text]="opinion.votosPositivos"
+              class="voto-numero">
+            </Label>
+
           </StackLayout>
-          <StackLayout row="0" col="3" rowSpan="2" class="voto" (tap)="votar(opinion, 'negativo')">
-            <Label text="&#xf165;" class="fas voto-icon"></Label>
-            <Label [text]="opinion.votosNegativos" class="voto-numero"></Label>
+
+          <!-- Voto negativo -->
+          <StackLayout
+            row="0"
+            col="3"
+            rowSpan="2"
+            class="voto"
+            (tap)="votar(opinion, 'negativo')">
+
+            <Label
+              text="&#xf165;"
+              class="fas voto-icon">
+            </Label>
+
+            <Label
+              [text]="opinion.votosNegativos"
+              class="voto-numero">
+            </Label>
+
           </StackLayout>
+
         </GridLayout>
+
       </ng-template>
     </ListView>
+
   </PullToRefresh>
+
 </GridLayout>
