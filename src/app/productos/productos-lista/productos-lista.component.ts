@@ -14,10 +14,8 @@ export class ProductosListaComponent implements OnInit {
 
   productos: Producto[] = [];
 
-  // Array donde se almacenan los resultados filtrados
   resultadosBusqueda: Producto[] = [];
 
-  // Variable vinculada al SearchBar mediante [(ngModel)]
   textoBusqueda: string = '';
 
   categorias = ['Medición', 'Protección', 'Control'];
@@ -29,8 +27,6 @@ export class ProductosListaComponent implements OnInit {
     private productoService: ProductoService,
     private routerExtensions: RouterExtensions
   ) {
-
-    // Asignación exclusiva para Android
     if (isAndroid) {
       this.mensajePlataforma =
         'Modo Android: interfaz optimizada para Material Design';
@@ -40,7 +36,6 @@ export class ProductosListaComponent implements OnInit {
   ngOnInit(): void {
     this.productos = this.productoService.getProductos();
 
-    // Al iniciar se muestran todos los productos
     this.resultadosBusqueda = [...this.productos];
   }
 
@@ -49,7 +44,6 @@ export class ProductosListaComponent implements OnInit {
     drawer.showDrawer();
   }
 
-  // Actualiza los resultados según el texto ingresado
   buscar(): void {
     const texto = this.textoBusqueda.toLowerCase().trim();
 
@@ -66,7 +60,6 @@ export class ProductosListaComponent implements OnInit {
     );
   }
 
-  // Navega al detalle mediante RouterExtensions
   verDetalle(producto: Producto): void {
     this.routerExtensions.navigate(['/productos', producto.id], {
       transition: {
