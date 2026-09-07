@@ -12,13 +12,14 @@ import { ProductoService } from '../../core/services/producto.service';
 })
 export class ProductosListaComponent implements OnInit {
   productos: Producto[] = [];
+  categorias = ['Medición', 'Protección', 'Control'];
   mensajePlataforma = 'Aplicación ejecutándose en iOS u otra plataforma';
 
   constructor(
     private productoService: ProductoService,
     private routerExtensions: RouterExtensions
   ) {
-    // Requisito 10: asignación ejecutada únicamente cuando la plataforma es Android.
+    // Requisito previo: asignación ejecutada únicamente cuando la plataforma es Android.
     if (isAndroid) {
       this.mensajePlataforma = 'Modo Android: interfaz optimizada para Material Design';
     }
@@ -33,6 +34,7 @@ export class ProductosListaComponent implements OnInit {
     drawer.showDrawer();
   }
 
+  // Reacciona al tap y navega al componente de detalle usando RouterExtensions.
   verDetalle(producto: Producto): void {
     this.routerExtensions.navigate(['/productos', producto.id], {
       transition: { name: 'slideLeft' }

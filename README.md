@@ -80,3 +80,8 @@ ns run ios
 ## Nota académica
 
 Este repositorio está preparado para que un evaluador pueda ubicar rápidamente cada evidencia solicitada en la rúbrica. La feature **Productos** es elaboración adicional sobre la navegación Drawer base.
+
+
+## Prácticas adicionales: ListView, detalle y Pull to Refresh
+
+El módulo **Productos** también implementa las prácticas posteriores del curso: un `ListView` con plantilla `FlexboxLayout`, binding de imagen/texto, navegación al detalle con `RouterExtensions`, un segundo `ListView` de opiniones usando `GridLayout`, controles de voto y actualización mediante **Pull to Refresh** que agrega opiniones aleatorias. La evidencia detallada se encuentra en `EVIDENCIAS_PRACTICAS_LISTVIEW_REFRESH.md`.
