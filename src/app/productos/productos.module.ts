@@ -3,8 +3,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptCommonModule } from '@nativescript/angular';
 
 import { ProductosRoutingModule } from './productos-routing.module';
+
 import { ProductosListaComponent } from './productos-lista/productos-lista.component';
 import { ProductoDetalleComponent } from './producto-detalle/producto-detalle.component';
+import { ProductoEditarComponent } from './producto-editar/producto-editar.component';
 
 @NgModule({
   imports: [
@@ -15,7 +17,8 @@ import { ProductoDetalleComponent } from './producto-detalle/producto-detalle.co
   ],
   declarations: [
     ProductosListaComponent,
-    ProductoDetalleComponent
+    ProductoDetalleComponent,
+    ProductoEditarComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })
