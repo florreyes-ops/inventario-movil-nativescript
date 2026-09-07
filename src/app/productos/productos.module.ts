@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptCommonModule } from '@nativescript/angular';
 
 import { ProductosRoutingModule } from './productos-routing.module';
@@ -10,6 +10,7 @@ import { ProductoDetalleComponent } from './producto-detalle/producto-detalle.co
   imports: [
     NativeScriptCommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ProductosRoutingModule
   ],
   declarations: [
