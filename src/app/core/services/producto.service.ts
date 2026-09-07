@@ -6,7 +6,21 @@ import { Producto } from '../models/producto.model';
 })
 export class ProductoService {
 
+  /*
+   * Listado local de productos.
+   *
+   * Se utilizan imágenes de distintos orígenes:
+   *
+   * 1. res://  -> App_Resources
+   * 2. https:// -> URL pública
+   * 3. ~/      -> archivo dentro de la aplicación
+   */
   private readonly productos: Producto[] = [
+
+    // =====================================================
+    // PRODUCTO 1
+    // Imagen cargada desde App_Resources
+    // =====================================================
     {
       id: 1,
       nombre: 'Multímetro digital',
@@ -14,12 +28,15 @@ export class ProductoService {
       categoria: 'Medición',
       precio: 42.50,
       stock: 8,
-      descripcion: 'Equipo portátil para mediciones básicas de tensión, corriente y resistencia.',
+      descripcion:
+        'Equipo portátil para mediciones básicas de tensión, corriente y resistencia.',
+
       caracteristicas: [
         'Pantalla digital',
         'Medición AC/DC',
         'Protección contra sobrecarga'
       ],
+
       opiniones: [
         {
           id: 101,
@@ -37,19 +54,28 @@ export class ProductoService {
         }
       ]
     },
+
+    // =====================================================
+    // PRODUCTO 2
+    // Imagen cargada desde una URL pública
+    // =====================================================
     {
       id: 2,
       nombre: 'Pinza amperimétrica',
-      imagen: 'res://icon_productos',
+      imagen:
+        'https://placehold.co/200x200/png?text=Pinza+amperimetrica',
       categoria: 'Medición',
       precio: 68.90,
       stock: 5,
-      descripcion: 'Instrumento de medición de corriente sin abrir el circuito.',
+      descripcion:
+        'Instrumento de medición de corriente sin abrir el circuito.',
+
       caracteristicas: [
         'Medición sin contacto',
         'Rango automático',
         'Diseño portátil'
       ],
+
       opiniones: [
         {
           id: 201,
@@ -67,19 +93,28 @@ export class ProductoService {
         }
       ]
     },
+
+    // =====================================================
+    // PRODUCTO 3
+    // Imagen cargada desde un path de la aplicación
+    // usando el token ~/
+    // =====================================================
     {
       id: 3,
       nombre: 'Breaker termomagnético',
-      imagen: 'res://icon_productos',
+      imagen: '~/assets/images/producto-local.png',
       categoria: 'Protección',
       precio: 18.75,
       stock: 16,
-      descripcion: 'Dispositivo de protección contra sobrecargas y cortocircuitos.',
+      descripcion:
+        'Dispositivo de protección contra sobrecargas y cortocircuitos.',
+
       caracteristicas: [
         'Protección térmica',
         'Protección magnética',
         'Montaje en riel DIN'
       ],
+
       opiniones: [
         {
           id: 301,
@@ -90,19 +125,27 @@ export class ProductoService {
         }
       ]
     },
+
+    // =====================================================
+    // PRODUCTO 4
+    // Segunda imagen desde App_Resources
+    // =====================================================
     {
       id: 4,
       nombre: 'Contactor trifásico',
-      imagen: 'res://icon_productos',
+      imagen: 'res://logo',
       categoria: 'Control',
       precio: 31.20,
       stock: 7,
-      descripcion: 'Elemento de maniobra para control de cargas eléctricas trifásicas.',
+      descripcion:
+        'Elemento de maniobra para control de cargas eléctricas trifásicas.',
+
       caracteristicas: [
         'Tres polos',
         'Control electromagnético',
         'Uso industrial'
       ],
+
       opiniones: [
         {
           id: 401,
@@ -115,26 +158,43 @@ export class ProductoService {
     }
   ];
 
-  // Devuelve todos los productos
+  /*
+   * Array local para almacenar productos archivados.
+   * Se utilizará en la práctica de Long Press.
+   */
+  private readonly productosArchivados: Producto[] = [];
+
+  // =====================================================
+  // OBTENER TODOS LOS PRODUCTOS
+  // =====================================================
   getProductos(): Producto[] {
     return [...this.productos];
   }
 
-  // Se conserva porque puede estar siendo usado por el componente de detalle
+  // =====================================================
+  // OBTENER PRODUCTO POR ID
+  // Se conserva para ProductoDetalleComponent
+  // =====================================================
   getProductoById(id: number): Producto | undefined {
     return this.productos.find(
-      (producto) => producto.id === id
+      (producto: Producto) => producto.id === id
     );
   }
 
-  // Método utilizado por ProductoEditarComponent
+  // =====================================================
+  // OBTENER PRODUCTO POR ID
+  // Utilizado por ProductoEditarComponent
+  // =====================================================
   getProductoPorId(id: number): Producto | undefined {
     return this.productos.find(
-      (producto) => producto.id === id
+      (producto: Producto) => producto.id === id
     );
   }
 
-  // Actualiza nombre y descripción
+  // =====================================================
+  // ACTUALIZAR PRODUCTO
+  // Modifica nombre y descripción
+  // =====================================================
   actualizarProducto(
     id: number,
     nombre: string,
@@ -142,7 +202,7 @@ export class ProductoService {
   ): boolean {
 
     const producto = this.productos.find(
-      (item) => item.id === id
+      (item: Producto) => item.id === id
     );
 
     if (!producto) {
@@ -153,5 +213,54 @@ export class ProductoService {
     producto.descripcion = descripcion;
 
     return true;
+  }
+
+  // =====================================================
+  // ARCHIVAR PRODUCTO
+  // Mueve el producto del array principal al array
+  // de productos archivados.
+  // =====================================================
+  archivarProducto(id: number): boolean {
+
+    const indice = this.productos.findIndex(
+      (producto: Producto) => producto.id === id
+    );
+
+    if (indice === -1) {
+      return false;
+    }
+
+    const producto = this.productos[indice];
+
+    this.productosArchivados.push(producto);
+    this.productos.splice(indice, 1);
+
+    return true;
+  }
+
+  // =====================================================
+  // BORRAR PRODUCTO
+  // Elimina el producto del array local
+  // =====================================================
+  borrarProducto(id: number): boolean {
+
+    const indice = this.productos.findIndex(
+      (producto: Producto) => producto.id === id
+    );
+
+    if (indice === -1) {
+      return false;
+    }
+
+    this.productos.splice(indice, 1);
+
+    return true;
+  }
+
+  // =====================================================
+  // OBTENER PRODUCTOS ARCHIVADOS
+  // =====================================================
+  getProductosArchivados(): Producto[] {
+    return [...this.productosArchivados];
   }
 }
